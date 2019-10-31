@@ -1,36 +1,48 @@
-import * as React from 'react'
-import Link from 'gatsby-link'
+import { graphql } from "gatsby";
+import React from "react";
+import { Helmet } from "react-helmet";
+
+/* Material-UI */
+import {createMuiTheme, CssBaseline} from '@material-ui/core';
+import {ThemeProvider} from '@material-ui/styles';
+
+import Header from "../components/Header";
 
 // Please note that you can use https://github.com/dotansimha/graphql-code-generator
 // to generate all types from graphQL schema
-interface IndexPageProps {
+interface HomeProps {
   data: {
     site: {
       siteMetadata: {
-        title: string
-      }
-    }
-  }
+        title: string,
+      },
+    },
+  };
 }
 
-export default class extends React.Component<IndexPageProps, {}> {
-  constructor(props: IndexPageProps, context: any) {
-    super(props, context)
-  }
-  public render() {
-    return (
-      <div>
-        <h1>Hi people</h1>
-        <p>
-          Welcome to your new{' '}
-          <strong>{this.props.data.site.siteMetadata.title}</strong> site.
-        </p>
-        <p>Now go build something great.</p>
-        <Link to="/page-2/">Go to page 2</Link>
-      </div>
-    )
-  }
-}
+const theme = createMuiTheme({
+  palette: {
+    type: "light", // Switching the dark mode on is a single property value change.
+  },
+});
+
+
+
+const Home: React.FC<HomeProps> = (props: HomeProps) => {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline/>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{props.data.site.siteMetadata.title}</title>
+        {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+      </Helmet>
+      <Header/>
+    </ThemeProvider>
+  );
+};
+
+export default Home;
 
 export const pageQuery = graphql`
   query IndexQuery {
@@ -40,4 +52,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;
