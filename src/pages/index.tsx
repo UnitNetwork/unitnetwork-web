@@ -2,23 +2,14 @@ import { graphql } from "gatsby";
 import React from "react";
 import { Helmet } from "react-helmet";
 
+import sphere from '../images/sphere.png'
+
 /* Material-UI */
-import {createMuiTheme, CssBaseline} from '@material-ui/core';
-import {ThemeProvider} from '@material-ui/styles';
+import { createMuiTheme, CssBaseline, Container } from '@material-ui/core';
+import { ThemeProvider, makeStyles } from '@material-ui/styles';
 
 import Header from "../components/Header";
 
-// Please note that you can use https://github.com/dotansimha/graphql-code-generator
-// to generate all types from graphQL schema
-interface HomeProps {
-  data: {
-    site: {
-      siteMetadata: {
-        title: string,
-      },
-    },
-  };
-}
 
 const theme = createMuiTheme({
   palette: {
@@ -26,30 +17,40 @@ const theme = createMuiTheme({
   },
 });
 
+const useStyles = makeStyles({
+  root: {
+    height: 700,
+    background: 'linear-gradient(70deg, rgb(26, 75, 173) 0%, rgb(26, 75, 173) 0%, rgb(41, 112, 255) 100%, rgb(41, 112, 255) 100%)',
+  },
+  sphere: {
+    animation: '$spin 700s linear infinite',
+  },
+  '@keyframes spin': { 
+    '100%': { 
+       transform: 'rotate(-360deg)' 
+    } 
+  }
+})
 
+const Home: React.FC = () => {
+  const classes = useStyles()
 
-const Home: React.FC<HomeProps> = (props: HomeProps) => {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline/>
+      <CssBaseline />
       <Helmet>
         <meta charSet="utf-8" />
-        <title>{props.data.site.siteMetadata.title}</title>
+        <title>Unit Network IO</title>
         {/* <link rel="canonical" href="http://mysite.com/example" /> */}
       </Helmet>
-      <Header/>
+      <div className={classes.root}>
+        <Container>
+          <Header />
+        </Container>
+        <img src={sphere} className={classes.sphere}/>
+      </div>
     </ThemeProvider>
   );
 };
 
 export default Home;
-
-export const pageQuery = graphql`
-  query IndexQuery {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-  }
-`;
